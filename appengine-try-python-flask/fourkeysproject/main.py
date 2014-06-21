@@ -87,7 +87,16 @@ form="""
 	<div style="color: red">%(error)s</div>
 	<br>
 	<br>
-	<input type="submit">
+	<input type="submit" name="bday">
+</form>
+"""
+cipherform="""
+<form method="post">
+	Enter some text to ROT13:
+	<br>
+	<textarea name="text" style="height: 100px; width: 400px;">%(text)s</textarea>
+	<br>
+	<input type="submit" name="rot">
 </form>
 """
 months =	['January',
@@ -104,6 +113,22 @@ months =	['January',
 			'December']
 		  
 month_abbvs = dict((m[:3].lower(), m) for m in months)
+
+def rotcipher(text):
+	output = ''
+	for i in text:
+		if i.isalpha():
+			if ord(i)>=65 and ord(i)<=77:
+				output += chr(ord(i)+13)
+			elif ord(i)>=78 and ord(i)<=96:
+				output += chr(ord(i)-13)
+			elif ord(i)>=97 and ord(i)<=109:
+				output += chr(ord(i)+13)
+			else:
+				output += chr(ord(i)-13)
+		else:
+			output += i
+	return output
 
 def valid_month(month):
 	if month:
@@ -129,25 +154,55 @@ class MainHandler(webapp2.RequestHandler):
 										"day": escape_html(day),
 										"year": escape_html(year)})
 	
+	def cipher_form(self, text=""):
+		self.response.out.write(cipherform % {"text": text})
+	
+	
 	def get(self):
 		self.write_form()
-			
+		self.cipher_form()
+					
 	def post(self):
-		user_month = self.request.get('month')
-		user_day = self.request.get('day')
-		user_year = self.request.get('year')
-		
-		month = valid_month(user_month)
-		day = valid_day(user_day)
-		year = valid_year(user_year)
-		
-		if not (month and day and year):
-			self.write_form("That doesn't look valid to me, friend.",
+		bday = self.request.get('bday')
+		rot = self.request.get('rot')
+		if bday:
+			user_month = self.request.get('month')
+			user_day = self.request.get('day')
+			user_year = self.request.get('year')
+					
+			month = valid_month(user_month)
+			day = valid_day(user_day)
+			year = valid_year(user_year)
+			
+			escapedtext = ''
+			tex = self.request.get('text')
+			escapedtext = escape_html(escapedtext)
+			
+			if not (month and day and year):
+				self.write_form("That doesn't look valid to me, friend.",
+								user_month,
+								user_day,
+								user_year)
+				self.cipher_form(escapedtext)
+			else:
+				self.redirect("/thanks")
+		else:
+			user_month = self.request.get('month')
+			user_day = self.request.get('day')
+			user_year = self.request.get('year')
+			
+			finaltext = ''
+			tex = self.request.get('text')
+			finaltext = rotcipher(tex)
+			
+			escapedtext = ''
+			escapedtext = escape_html(finaltext)
+			
+			self.write_form("I'll just keep this warm",
 							user_month,
 							user_day,
 							user_year)
-		else:
-			self.redirect("/thanks")
+			self.cipher_form(escapedtext)
 		
 class TestHandler(webapp2.RequestHandler):
 	def post(self):
@@ -161,6 +216,7 @@ class ThanksHandler(webapp2.RequestHandler):
 	def get(self):
 		self.response.write("Thanks! That's a totally valid day! :D ")
 		
+
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
 	('/testform', TestHandler),
