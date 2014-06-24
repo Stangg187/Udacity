@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    {% block head %}
+    {% endblock %}
+    <style>
+      body {
+      text-align: center;
+      background: url("/assets/background.png");
+      background-size: cover;
+      background-position: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      }
+      p {
+      font-size: 22px;
+      }
+      h1 {
+        background-color: #ddd;
+        color: #888;
+        margin: 0;
+        height: 50px;
+      }
+      input {
+        border: 1;
+        padding: 10px;
+        font-size: 22px;
+        font-family: Arial, sans-serif;
+      }
+      input[type="submit"] {
+        background: red;
+        color: white;
+        width: 150px;
+      }
+      .label {
+        text-align: right
+      }
+      .error {
+        color: red
+      }
+      table.center {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+		<h1>
+  		Udacity Projects
+    </h1>
+    {% block content %}
+ 		{% endblock %}
+  <body>
+
+</html>

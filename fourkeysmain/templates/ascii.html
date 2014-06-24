@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block head %}
+<head>
+    <title>Ascii Chan</title>
+</head>
+{% endblock %}
+
+{% block content %}
+<h1> ASCII CHAN </h1>
+
+<form method="post">
+	<label>
+		<div>title</div>
+		<input type="text" name="title" value="{{title}}">
+	</label>
+
+	<label>
+		<div>art</div>
+		<textarea name="art" style="height: 200px; width: 400px;">{{art}}</textarea>
+	</label>
+	<div class="error">{{error}}</div>
+	<br>
+	<input type="submit" name="submit">
+</form>
+
+
+{% endblock %}

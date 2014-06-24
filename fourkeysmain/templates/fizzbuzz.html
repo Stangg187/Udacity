@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block head %}
+<head>
+  <title>Fizz Buzz</title>
+</head>
+{% endblock %}
+{% block content %}
+
+  <form>
+    <h2>Play Fizzbuzz</h2>
+    <input type="text" name="n">
+    <button>FIZZBUZZ</button>
+
+    <ol>
+      {% for x in range(1, n+1) %}
+        {% if (x % 3 == 0 and x % 5 == 0) %}
+          <li>Fizzbuzz</li>
+        {% elif x % 5 == 0 %}
+          <li>Buzz</li>
+        {% elif x % 3 == 0 %}
+          <li>Fizz</li>
+        {% else %}
+          <li>{{x}}</li>
+        {% endif %}
+      {% endfor %}  
+    </ol>
+  </form>
+    
+{% endblock %}
