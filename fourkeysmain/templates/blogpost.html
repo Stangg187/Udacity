@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block head %}
+<head>
+    <title>Blog Front Page</title>
+</head>
+{% endblock %}
+
+{% block content %}
+<a href="/blog" class="main-title"> 
+FOURKEYS BLOG 
+</a>
+<hr>
+  {{post.render() | safe}}
+
+
+{% endblock %}

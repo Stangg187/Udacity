@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block head %}
+<head>
+    <title>Blog Front Page</title>
+</head>
+{% endblock %}
+
+{% block content %}
+<a href="/blog" class="main-title"> 
+FOURKEYS BLOG 
+</a>
+<hr>
+<form method="post">
+	<input type="submit" name="submit" value="New Blog Post" style="width: 200px">
+</form>
+<hr>
+
+{% for blog in blogs %}
+	{{ blog.render() | safe }}
+	<br><br>
+{% endfor %}
+{% endblock %}

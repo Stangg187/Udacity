@@ -28,6 +28,10 @@ from google.appengine.ext import db
 template_dir = os.path.join(os.path.dirname(__file__), 'templates') 
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
 
+def render_str(template, **params):
+    t = jinja_env.get_template(template)
+    return t.render(params)
+
 #base class contains template rendering functions 
 class BaseHandler(webapp2.RequestHandler):
 	def write(self, *a, **kw):
@@ -50,6 +54,7 @@ class MainPage(BaseHandler):
 		fizzbuzz = self.request.get('fizzbuzz')
 		signup = self.request.get('signup')
 		asciichan = self.request.get('asciichan')
+		blog = self.request.get('blog')
 
 		if rot13:
 			self.redirect('/rot13')
@@ -61,6 +66,8 @@ class MainPage(BaseHandler):
 			self.redirect('/fizzbuzz')
 		elif asciichan:
 			self.redirect('/asciichan')
+		elif blog:
+			self.redirect('/blog')
 
 class Rot13(BaseHandler):
 	def get(self):
@@ -144,9 +151,19 @@ class Shopping(BaseHandler):
 		items = self.request.get_all('food')
 		self.render('shopping-form.html', items = items)
 
+class Art(db.Model):
+	title = db.StringProperty(required = True)
+	art = db.TextProperty(required = True)
+	created = db.DateTimeProperty(auto_now_add = True)
+
+	def render(self):
+		return render_str("art.html", art = self)
+
 class asciichan(BaseHandler):
 	def render_asciichan(self, title="", art="", error=""):
-		self.render('ascii.html', title=title, art=art, error=error)
+		arts = db.GqlQuery("SELECT * FROM Art ORDER BY created DESC")
+
+		self.render('ascii.html', title=title, art=art, error=error, arts=arts)
 
 	def get(self):
 		self.render_asciichan()
@@ -156,11 +173,59 @@ class asciichan(BaseHandler):
 		art = self.request.get('art')
 
 		if title and art:
-			self.write("Thanks")
+			a = Art(title = title, art = art)
+			a.put()
+
+			self.redirect("/asciichan")
 		else:
 			error = "We need both a title and some artwork!"
 			self.render_asciichan(error=error, title=title, art=art)
 
+class Blog(db.Model):
+	subject = db.StringProperty(required=True)
+	content = db.TextProperty(required=True)
+	created = db.DateTimeProperty(auto_now_add = True)
+	last_modified = db.DateTimeProperty(auto_now_add = True)
+
+	def render(self):
+		self._render_text = self.content.replace('\n', '<br>')
+		return render_str("post.html", blog = self)
+
+class BlogHandler(BaseHandler):
+	def render_blog(self):
+		blogs = Blog.all().order('-created')
+
+		self.render('blogfront.html', blogs=blogs)
+
+	def get(self):
+		self.render_blog()
+
+	def post(self):
+		self.redirect('/blog/newpost')			
+
+class BlogNewPostHandler(BaseHandler):
+	def get(self):
+		self.render('blognewpost.html')
+
+	def post(self):
+		subject = self.request.get('subject')
+		content = self.request.get('content')
+		
+		if subject and content:
+			b = Blog(subject = subject, content = content)
+			b.put()
+			post_id = b.key().id()
+
+			self.redirect('/blog/%d' % post_id)
+		else:
+			error = "We need both a subject and cotnent!"
+			self.render('blognewpost.html', subject=subject, content=content, error=error)	
+
+class BlogPostHandler(BaseHandler):
+	def get(self, post_id):
+		post = Blog.get_by_id(int(post_id))
+
+		self.render('blogpost.html', post=post, post_id=post_id)
 
 
 
@@ -173,5 +238,8 @@ app = webapp2.WSGIApplication([
     ('/signup', Signup),
 	('/welcome', Welcome),
 	('/fizzbuzz', Fizzbuzz),
-	('/asciichan', asciichan)
+	('/asciichan', asciichan),
+	('/blog', BlogHandler),
+	('/blog/newpost', BlogNewPostHandler),
+	('/blog/(\d+)', BlogPostHandler)
 ], debug=True)

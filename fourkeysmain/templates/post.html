@@ -1,0 +1,15 @@
+<div class="content">
+	<div class="content-heading">
+		<div class="content-subject">
+			{{blog.subject}}
+		</div>
+
+		<div class="content-date">
+			{{blog.created.strftime("%b %d, %Y")}}
+		</div>
+	</div>
+
+	<div class="content-body">
+		{{blog._render_text | safe}}
+	</div>
+</div>

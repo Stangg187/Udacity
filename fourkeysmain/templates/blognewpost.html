@@ -2,22 +2,24 @@
 
 {% block head %}
 <head>
-    <title>Ascii Chan</title>
+    <title>New Blog Post</title>
 </head>
 {% endblock %}
 
 {% block content %}
-<h1> ASCII CHAN </h1>
+<h1> New Blog Entry </h1>
+
+<hr>
 
 <form method="post">
 	<label>
-		<div>title</div>
-		<input type="text" name="title" value="{{title}}">
+		<div>Subject</div>
+		<input type="text" name="subject" value="{{subject}}">
 	</label>
 
 	<label>
-		<div>art</div>
-		<textarea name="art">{{art}}</textarea>
+		<div>Content</div>
+		<textarea name="content">{{content}}</textarea>
 	</label>
 	<div class="error">{{error}}</div>
 	<br>
@@ -26,8 +28,4 @@
 
 <hr>
 
-{% for art in arts %}
-	{{ art.render() | safe}}
-	<br><br>
-{% endfor %}
 {% endblock %}
