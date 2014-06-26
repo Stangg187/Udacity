@@ -44,6 +44,8 @@ class BaseHandler(webapp2.RequestHandler):
 	def render(self, template, **kw):
 		self.write(self.render_str(template, **kw))
 
+### Front Page of site
+
 class MainPage(BaseHandler):
 	def get(self):
 		self.render('main-page.html')
@@ -69,6 +71,8 @@ class MainPage(BaseHandler):
 		elif blog:
 			self.redirect('/blog')
 
+### Rot13
+
 class Rot13(BaseHandler):
 	def get(self):
 		self.render('rot13-form.html')
@@ -79,6 +83,8 @@ class Rot13(BaseHandler):
 		finaltext = rot13.rotcipher(tex)
 		
 		self.render('rot13-form.html', text = finaltext)
+
+### Signup Form
 
 class Signup(BaseHandler):
 	def get(self):
@@ -139,6 +145,8 @@ class Welcome(BaseHandler):
 		else:
 			self.redirect('/signup')
 
+### Fizzz Buzzz
+
 class Fizzbuzz(BaseHandler):
 	def get(self):
 		n = self.request.get("n", 0)
@@ -146,10 +154,14 @@ class Fizzbuzz(BaseHandler):
 			n = int(n)
 		self.render('fizzbuzz.html', n = n)
 
+### Shopping
+
 class Shopping(BaseHandler):
 	def get(self):
 		items = self.request.get_all('food')
 		self.render('shopping-form.html', items = items)
+
+#### ASCII classes
 
 class Art(db.Model):
 	title = db.StringProperty(required = True)
@@ -181,6 +193,11 @@ class asciichan(BaseHandler):
 			error = "We need both a title and some artwork!"
 			self.render_asciichan(error=error, title=title, art=art)
 
+###BLOG CLASSES
+
+def blog_key(name = 'default'):
+    return db.Key.from_path('blogs', name)
+
 class Blog(db.Model):
 	subject = db.StringProperty(required=True)
 	content = db.TextProperty(required=True)
@@ -193,7 +210,7 @@ class Blog(db.Model):
 
 class BlogHandler(BaseHandler):
 	def render_blog(self):
-		blogs = Blog.all().order('-created')
+		blogs = db.GqlQuery("SELECT * from Blog order by created desc limit 10")
 
 		self.render('blogfront.html', blogs=blogs)
 
@@ -212,7 +229,7 @@ class BlogNewPostHandler(BaseHandler):
 		content = self.request.get('content')
 		
 		if subject and content:
-			b = Blog(subject = subject, content = content)
+			b = Blog(parent = blog_key(), subject = subject, content = content)
 			b.put()
 			post_id = b.key().id()
 
@@ -223,13 +240,16 @@ class BlogNewPostHandler(BaseHandler):
 
 class BlogPostHandler(BaseHandler):
 	def get(self, post_id):
-		post = Blog.get_by_id(int(post_id))
+		key = db.Key.from_path('Blog', int(post_id), parent=blog_key())
+		post = db.get(key)
+
+		if not post:
+			self.error(404)
 
 		self.render('blogpost.html', post=post, post_id=post_id)
 
 
-
-
+### WSGI Hanlders and URLS
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
