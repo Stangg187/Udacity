@@ -16,6 +16,9 @@
 #
 import webapp2
 import re
+import hashlib
+import random
+import string
 
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 PASS_RE = re.compile("^.{3,20}$")
@@ -34,3 +37,16 @@ def verify_password(password, verify):
 def valid_email(email):
 	return not email or EMAIL_RE.match(email)	
 
+def make_salt():
+	return ''.join(random.choice(string.letters) for x in xrange(15))
+
+def make_pw_hash(pw, salt=None):
+	if not salt:
+		salt = make_salt()
+	h = hashlib.sha256(pw + salt).hexdigest()
+	return '%s,%s' % (h, salt)
+
+def valid_pw(pw, h):
+	salt = h.split(',')[1]
+	test = hashlib.sha256(pw + salt).hexdigest()
+	return test == h.split(',')[0]

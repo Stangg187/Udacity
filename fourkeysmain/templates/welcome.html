@@ -7,7 +7,10 @@
 {% endblock %}
 
 {% block content %}
-
-	<div>Welcome to the website, {{username}}</div>
+<form method="post">
+	<h2>Welcome to the website, {{username}}</h2>
+	<br>
+	<input type="submit" name="Logout" value="Logout">
+</form>
 
 {% endblock %}

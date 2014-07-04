@@ -19,7 +19,7 @@
     {% endfor %}
   {% endif %}
   
-  <button>Add</button>
+  <input type="submit" class="add" value="Add">
 
   {% if items %}
     
@@ -27,12 +27,13 @@
     <br>
     
     <h2>The List</h2>
-    
+    <div class="shopping-list">
     <ul>
       {% for item in items %}
         <li> {{item}} </li>
       {% endfor %}
     </ul>
+  </div>
 
   {% endif %}  
 </form>

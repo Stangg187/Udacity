@@ -18,6 +18,9 @@ import os
 import webapp2
 import jinja2
 import re
+import hashlib
+import random
+import string
 
 import rot13
 import signup
@@ -57,6 +60,7 @@ class MainPage(BaseHandler):
 		signup = self.request.get('signup')
 		asciichan = self.request.get('asciichan')
 		blog = self.request.get('blog')
+		login = self.request.get('login')
 
 		if rot13:
 			self.redirect('/rot13')
@@ -70,6 +74,8 @@ class MainPage(BaseHandler):
 			self.redirect('/asciichan')
 		elif blog:
 			self.redirect('/blog')
+		elif login:
+			self.redirect('/login')
 
 ### Rot13
 
@@ -85,6 +91,11 @@ class Rot13(BaseHandler):
 		self.render('rot13-form.html', text = finaltext)
 
 ### Signup Form
+class UserData(db.Model):
+	username = db.StringProperty(required = True)
+	password = db.StringProperty(required = True)
+	email = db.EmailProperty(required = False)
+
 
 class Signup(BaseHandler):
 	def get(self):
@@ -100,7 +111,12 @@ class Signup(BaseHandler):
 
 		params = dict(username = user_name,
 						email = user_emai)
+
+		users = db.GqlQuery("SELECT * from UserData WHERE username=:1 limit 1", user_name)
+
+		user = users.get()
 		
+
 		if(user_name):
 			if not signup.valid_username(user_name):
 				params['usererror'] = "That is not a valid username"
@@ -109,6 +125,10 @@ class Signup(BaseHandler):
 			params['usererror'] = "That is not a valid username"
 			have_error = True
 		
+		if user:
+				params['usererror'] = "That username already exists"
+				have_error = True
+
 		if(user_pass):
 			if not signup.valid_password(user_pass):
 				params['passerror'] = "That is not a valid password"
@@ -134,16 +154,134 @@ class Signup(BaseHandler):
 		if have_error:
 			self.render('signup-form.html', **params)
 		else:
-			self.redirect('/welcome?username=' + user_name)
+			hashed_password = signup.make_pw_hash(user_pass)
+
+			if user_emai:
+				newuser = UserData(username=user_name,password=hashed_password,email=user_emai)
+			else:
+				newuser = UserData(username=user_name,password=hashed_password)
+
+			newuser.put()
+
+			cookie_str = str(user_name + '|' + hashed_password.split(',')[0])
+
+			self.response.headers.add_header('Set-Cookie', 'user_id='+cookie_str+'; Path=/')
+			self.redirect('/signup/welcome')
+
+class Login(BaseHandler):
+	def get(self):
+		self.render('login.html')
+
+	def post(self):
+		have_error = False	
+		user_name = self.request.get('username')
+		user_pass = self.request.get('password')
+
+		params = dict(username = user_name)
+
+		users = db.GqlQuery("SELECT * from UserData WHERE username=:1 limit 1", user_name)
+
+		user = users.get()
+
+		if user:
+			hashed_password = signup.make_pw_hash(user_pass, user.password.split(',')[1])
+			checkpw = signup.valid_pw(user_pass, user.password)	
+
+		if(user_name):
+			if not signup.valid_username(user_name):
+				params['usererror'] = "That is not a valid username"
+				have_error = True
+		else:
+			params['usererror'] = "That is not a valid username"
+			have_error = True
+		
+		if not user:
+				params['usererror'] = "That username does not exist"
+				have_error = True
+		elif user_pass:
+			if not checkpw:
+				params['passerror'] = "Invalid Password"
+				have_error = True
+		else:	
+			params['passerror'] = "Please enter a password"
+			have_error = True
+
+		
+
+		if have_error:
+			self.render('login.html', **params)
+		else:
+			cookie_str = str(user_name + '|' + hashed_password.split(',')[0])
+
+			self.response.headers.add_header('Set-Cookie', 'user_id='+cookie_str+'; Path=/')
+			self.redirect('/login/welcome')
+
 
 
 class Welcome(BaseHandler):
 	def get(self):
-		username = self.request.get('username')
-		if signup.valid_username(username):
-			self.render('welcome.html', username = username)
+		cookie = self.request.cookies.get('user_id')
+
+		if cookie:
+			userid = str(cookie.split('|')[0])
+			passhash = str(cookie.split('|')[1])
+
+			users = db.GqlQuery("SELECT * from UserData WHERE  username=:1 limit 1", userid)
+
+			user = users.get()
+
+			passdb = user.password.split(',')[0]
+
+			if signup.valid_username(userid):
+				if passhash == passdb:
+					self.render('welcome.html', username = userid)
+			else:
+				self.redirect('/signup')
 		else:
 			self.redirect('/signup')
+
+	def post(self):
+
+		logout = self.request.get('Logout')
+
+		if logout:
+			self.redirect('/logout')
+
+
+class LoginWelcome(BaseHandler):
+	def get(self):
+		cookie = self.request.cookies.get('user_id')
+
+		if cookie:
+			userid = str(cookie.split('|')[0])
+			passhash = str(cookie.split('|')[1])
+
+			users = db.GqlQuery("SELECT * from UserData WHERE  username=:1 limit 1", userid)
+
+			user = users.get()
+
+			passdb = user.password.split(',')[0]
+
+			if signup.valid_username(userid):
+				if passhash == passdb:
+					self.render('welcome.html', username = userid)
+			else:
+				self.redirect('/login')
+		else:
+			self.redirect('/login')
+
+	def post(self):
+
+		logout = self.request.get('Logout')
+
+		if logout:
+			self.response.delete_cookie('user_id')
+			self.redirect('/login')
+
+class Logout(BaseHandler):
+	def get(self):
+		self.response.delete_cookie('user_id')
+		self.redirect('/signup')
 
 ### Fizzz Buzzz
 
@@ -256,10 +394,13 @@ app = webapp2.WSGIApplication([
     ('/rot13', Rot13),
     ('/shopping', Shopping),
     ('/signup', Signup),
-	('/welcome', Welcome),
+	('/signup/welcome', Welcome),
 	('/fizzbuzz', Fizzbuzz),
 	('/asciichan', asciichan),
 	('/blog', BlogHandler),
 	('/blog/newpost', BlogNewPostHandler),
-	('/blog/(\d+)', BlogPostHandler)
+	('/blog/(\d+)', BlogPostHandler),
+	('/login', Login),
+	('/login/welcome', LoginWelcome),
+	('/logout', Logout)
 ], debug=True)

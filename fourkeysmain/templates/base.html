@@ -5,17 +5,30 @@
     
     {% block head %}
     {% endblock %}
-  
+    <link type="text/css" rel="stylesheet" href="/assets/normalize.css" />
     <link type="text/css" rel="stylesheet" href="/assets/main.css" />
-   
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/codejs.js"></script>
   </head>
 
   <body>
-		<h1>
-  		Udacity Projects
-    </h1>
+		<header>
+      <h1><a href="/" class="main-title">Fourkeys Udacity Projects</a></h1>
+      <div class="nav">
+        <ul class="main-list">
+          <li class="main-list-item"><a href="/rot13" class="title-link">Rot13 Cipher</a></li>
+          <li class="main-list-item"><a href="/shopping" class="title-link">Shopping List</a></li>
+          <li class="main-list-item"><a href="/fizzbuzz" class="title-link">Fizz Buzz</a></li>
+          <li class="main-list-item"><a href="/asciichan" class="title-link">ASCII Chan</a></li>
+          <li class="main-list-item"><a href="/blog" class="title-link">Blog</a></li>
+          <li class="main-list-item"><a href="/signup" class="title-link">Signup Form</a></li>
+          <li class="main-list-item"><a href="/login" class="title-link">Login</a></li>
+        </ul>
+      </div>
+    </header>
+    <br>
     {% block content %}
  		{% endblock %}
-  <body>
+  </body>
 
 </html>

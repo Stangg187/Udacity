@@ -1,50 +1,119 @@
+header {
+  text-align: center;
+  background: url("/assets/color.png");
+  background-size: cover;
+  color: white;
+  height: 200px; 
+  position: relative;
+}
+.nav {
+  width: 100%;
+  margin: 0 0 0 0;
+  padding: 0;
+  background-color: rgba(0,0,0,0.7);
+  position: absolute;
+  bottom: 0;
+}
+.nav ul {
+  list-style: none;
+  width: 950px;
+  margin: 0 auto;
+  padding: 0;
+}
+.nav li {
+  float: left;
+  width: 130px;
+}  
+.nav li a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 8px 15px;
+}
+.nav li a:hover{
+ border: 2px solid red;
+ border-radius: 4px;  
+}
 body {
   text-align: center;
   background: url("/assets/background.png");
   background-size: cover;
-  background-position: center;
   color: white;
   font-family: Arial, sans-serif;
+}
+.shopping-list ul {
   margin: 0 auto;
-  padding: 10px;
+  list-style: none;
 }
 p {
   font-size: 22px;
 }
 h1 {
-  background-color: #ddd;
-  color: #888;
-  margin: 0;
-  height: 50px;
+  color: white;  
+  margin: 0 auto;
 }
 label {
   display: block;
   font-size: 20px;
 }
 input {
-  border: 1;
+  border: 2px solid white;
+  border-radius: 5px;
   padding: 10px;
   font-size: 22px;
   font-family: Arial, sans-serif;
+  color: black;
 }
 input[type="submit"] {
   background: red;
   color: white;
   width: 150px;
 }
+input[type="submit"]:hover {
+  background: #8B008B;
+}
 input[type=text]{
   width: 500px;
   font-size: 20px;
   padding: 2px;
+  color: black;
+}
+input[type=password]{
+  width: 500px;
+  font-size: 20px;
+  padding: 2px;
+  color: black;
+}
+.like {
+  background: rgba(0,0,255,1);
+  display: inline;
+  margin-top: 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 15px;
+  padding: 5px;
+}
+.like:hover {
+  background: rgba(0,200,0,1);
+}
+.like:active {
+  border: 2px solid rgba(0,0,0,0);
+}
+.add {
+  font-size: 20px;
+  padding: 2px;
+  width: 100px;
 }
 textarea {
   width: 500px;
   height: 400px;
   font-size: 20px;
   font-family: monospace;
+  color: black;
 }
 .label {
-  text-align: right
+  text-align: right;
+  padding: 5px;
 }
 .error {
   color: red
@@ -83,30 +152,46 @@ pre {
 .main-title {
   display: block;
   text-decoration: none;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   text-align: center;
-  background-color: #ddd;
-  color: #888;
+  color: white;
   font-size: 40px;
 }
-.content + .content {
-  margin-top: 15px;
+.content{
+  margin-top: 35px;
 }
 .content-heading {
   position: relative;
   border-bottom: 3px solid white;
+  max-width: 700px;
+  margin: 0 auto;
 }
 .content-subject {
   font-weight: bold;
   font-size: 24px;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
 }
 .content-body {
-  margin-top: 5px;
+  padding: 10px;
   font-size: 17px;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: left;
 }
 .content-date {
   position: absolute;
   right: 0px;
   bottom: 0px;
   color: #999;
+}
+
+@media (max-width: 500px) {
+  .nav li {
+      display: block;
+  }
+  .main-title {
+    font-size: 26px;
+  }
 }
