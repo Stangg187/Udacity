@@ -10,7 +10,6 @@ header {
   width: 100%;
   margin: 0 0 0 0;
   padding: 0;
-  background-color: rgba(0,0,0,0.7);
   position: absolute;
   bottom: 0;
 }
@@ -29,6 +28,15 @@ header {
   color: white;
   text-decoration: none;
   padding: 8px 15px;
+  background-color: rgba(150,0,0,0.5);
+  border: 2px solid rgba(150,0,0,0.5);
+  border-radius: 4px 4px 0 0;
+}
+.nav li:first-child a {
+  border-radius: 4px 4px 0 4px;
+}
+.nav li:last-child a {
+  border-radius: 4px 4px 4px 0;
 }
 .nav li a:hover{
  border: 2px solid red;
@@ -37,13 +45,19 @@ header {
 body {
   text-align: center;
   background: url("/assets/background.png");
-  background-size: cover;
   color: white;
   font-family: Arial, sans-serif;
 }
-.shopping-list ul {
+.shopping-list {
+  max-width: 400px;
   margin: 0 auto;
-  list-style: none;
+  text-align: justify;
+}
+.fizzbuzz-list {
+  max-width: 100px;
+  margin: 0 auto;
+  margin-top: 10px;
+
 }
 p {
   font-size: 22px;
@@ -57,7 +71,7 @@ label {
   font-size: 20px;
 }
 input {
-  border: 2px solid white;
+  border: 2px solid black;
   border-radius: 5px;
   padding: 10px;
   font-size: 22px;
@@ -68,6 +82,7 @@ input[type="submit"] {
   background: red;
   color: white;
   width: 150px;
+  border: 2px solid white;
 }
 input[type="submit"]:hover {
   background: #8B008B;
@@ -86,6 +101,7 @@ input[type=password]{
 }
 .like {
   background: rgba(0,0,255,1);
+  border: 2px solid white;
   display: inline;
   margin-top: 10px;
   border-radius: 5px;
@@ -104,12 +120,19 @@ input[type=password]{
   padding: 2px;
   width: 100px;
 }
+.fizzbuzz {
+  font-size: 20px;
+  padding: 2px;
+  width: 100px;
+}
 textarea {
   width: 500px;
   height: 400px;
   font-size: 20px;
   font-family: monospace;
   color: black;
+  border: 2px solid black;
+  border-radius: 5px;
 }
 .label {
   text-align: right;
@@ -125,20 +148,29 @@ table.center {
 hr {
   margin: 20px auto;
 }
-.art + .art {
+.art {
   margin-top: 20px;
 }
 .art-heading {
   position: relative;
-  border-bottom: 3px solid- #666;
+  border-bottom: 3px solid white;
+  max-width: 900px;
+  margin: 0 auto;
 }
 .art-title {
   font-weight: bold;
   font-size: 24px;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
 }
 .art-body {
-  margin-top: 5px;
-  font-size: 17px;   
+  padding: 5px;
+  font-size: 17px;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 12px;   
 }
 .art-date {
   position: absolute;
@@ -146,8 +178,8 @@ hr {
   bottom: 0px;
   color: #999;
 }
-pre {
-  text-align: center;
+.art pre {
+  text-align: left;
 }
 .main-title {
   display: block;
@@ -159,6 +191,7 @@ pre {
 }
 .content{
   margin-top: 35px;
+
 }
 .content-heading {
   position: relative;
@@ -172,6 +205,7 @@ pre {
   position: absolute;
   left: 0px;
   bottom: 0px;
+
 }
 .content-body {
   padding: 10px;
@@ -179,6 +213,8 @@ pre {
   max-width: 700px;
   margin: 0 auto;
   text-align: left;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 12px;
 }
 .content-date {
   position: absolute;

@@ -7,24 +7,28 @@
 {% endblock %}
 
 {% block content %}
-<h1> ASCII CHAN </h1>
+<a href="/blog" class="main-title"> 
+ASCII CHAN 
+</a>
 
 <form method="post">
 	<label>
-		<div>title</div>
+		<div>Title</div>
 		<input type="text" name="title" value="{{title}}">
 	</label>
 
 	<label>
-		<div>art</div>
+		<div>Art</div>
 		<textarea name="art">{{art}}</textarea>
 	</label>
 	<div class="error">{{error}}</div>
 	<br>
 	<input type="submit" name="submit">
-</form>
 
-<hr>
+	<hr>
+	<br>
+
+</form>
 
 {% for art in arts %}
 	{{ art.render() | safe}}
