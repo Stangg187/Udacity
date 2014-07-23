@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<a href="/blog" class="main-title"> 
+<a href="/asciichan" class="main-title"> 
 ASCII CHAN 
 </a>
 
@@ -17,18 +17,25 @@ ASCII CHAN
 		<input type="text" name="title" value="{{title}}">
 	</label>
 
+	{% if img_url %}
+		<img class="map" src="{{img_url}}">
+	{% endif %}
+
 	<label>
 		<div>Art</div>
 		<textarea name="art">{{art}}</textarea>
 	</label>
+
 	<div class="error">{{error}}</div>
 	<br>
 	<input type="submit" name="submit">
-
+	
 	<hr>
 	<br>
 
 </form>
+
+
 
 {% for art in arts %}
 	{{ art.render() | safe}}

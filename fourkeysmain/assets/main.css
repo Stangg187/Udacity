@@ -1,8 +1,6 @@
 header {
-  text-align: center;
   background: url("/assets/color.png");
   background-size: cover;
-  color: white;
   height: 200px; 
   position: relative;
 }
@@ -12,22 +10,23 @@ header {
   padding: 0;
   position: absolute;
   bottom: 0;
+  border-bottom: 2px solid rgba(150,0,0,0.5);
+  overflow: auto;
 }
 .nav ul {
   list-style: none;
-  width: 950px;
   margin: 0 auto;
-  padding: 0;
+  width: 1200px;
 }
 .nav li {
   float: left;
-  width: 130px;
+  width: 135px;
 }  
 .nav li a {
   display: block;
-  color: white;
+  color: #aaaaaa;
   text-decoration: none;
-  padding: 8px 15px;
+  padding: 8px 10px;
   background-color: rgba(150,0,0,0.5);
   border: 2px solid rgba(150,0,0,0.5);
   border-radius: 4px 4px 0 0;
@@ -45,8 +44,13 @@ header {
 body {
   text-align: center;
   background: url("/assets/background.png");
-  color: white;
-  font-family: Arial, sans-serif;
+  color: #aaaaaa;
+  font-family: 'Marvel', sans-serif;
+  font-size: 24px;
+  width:100%;
+  height:100%;
+  padding:0;
+  margin:0;
 }
 .shopping-list {
   max-width: 400px;
@@ -63,7 +67,7 @@ p {
   font-size: 22px;
 }
 h1 {
-  color: white;  
+  color: #aaaaaa;  
   margin: 0 auto;
 }
 label {
@@ -74,15 +78,15 @@ input {
   border: 2px solid black;
   border-radius: 5px;
   padding: 10px;
-  font-size: 22px;
-  font-family: Arial, sans-serif;
+  font-size: 25px;
+  font-family: 'Marvel', sans-serif;
   color: black;
 }
 input[type="submit"] {
-  background: red;
-  color: white;
-  width: 150px;
-  border: 2px solid white;
+  background: rgba(150,0,0,1);
+  color: #aaaaaa;
+  width: 170px;
+  border: 2px solid #aaaaaa;
 }
 input[type="submit"]:hover {
   background: #8B008B;
@@ -100,17 +104,17 @@ input[type=password]{
   color: black;
 }
 .like {
-  background: rgba(0,0,255,1);
-  border: 2px solid white;
+  background: rgba(0,0,175,1);
+  border: 2px solid #aaaaaa;
   display: inline;
   margin-top: 10px;
   border-radius: 5px;
-  color: white;
+  color: #aaaaaa;
   font-size: 15px;
   padding: 5px;
 }
 .like:hover {
-  background: rgba(0,200,0,1);
+  background: rgba(0,0,255,1);
 }
 .like:active {
   border: 2px solid rgba(0,0,0,0);
@@ -145,15 +149,25 @@ table.center {
   margin-left: auto;
   margin-right: auto;
 }
+table.center td {
+  padding: 10px;
+}
 hr {
   margin: 20px auto;
 }
 .art {
   margin-top: 20px;
 }
+.map {
+  position: absolute;
+  display: inline;
+  right: 50px;
+  border-radius: 12px;
+  border: 2px solid black;
+}
 .art-heading {
   position: relative;
-  border-bottom: 3px solid white;
+  border-bottom: 3px solid #aaaaaa;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -183,11 +197,15 @@ hr {
 }
 .main-title {
   display: block;
+  font-family: 'Permanent Marker', cursive;
   text-decoration: none;
   margin-bottom: 20px;
   text-align: center;
-  color: white;
+  color: #aaaaaa;
   font-size: 40px;
+}
+.sub-main-title {
+  margin-top: -20px;
 }
 .content{
   margin-top: 35px;
@@ -195,7 +213,7 @@ hr {
 }
 .content-heading {
   position: relative;
-  border-bottom: 3px solid white;
+  border-bottom: 3px solid #aaaaaa;;
   max-width: 700px;
   margin: 0 auto;
 }
@@ -215,12 +233,20 @@ hr {
   text-align: left;
   background-color: rgba(0,0,0,0.5);
   border-radius: 12px;
+  visibility: visible;
+  height: auto;
 }
 .content-date {
   position: absolute;
   right: 0px;
   bottom: 0px;
   color: #999;
+}
+
+.show-content {
+  visibility: hidden;
+  height: 0;
+
 }
 
 @media (max-width: 500px) {

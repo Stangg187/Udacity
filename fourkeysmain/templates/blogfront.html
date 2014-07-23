@@ -10,11 +10,12 @@
 <a href="/blog" class="main-title"> 
 FOURKEYS BLOG 
 </a>
-<hr>
-<form method="post">
-	<input type="submit" name="submit" value="New Blog Post" style="width: 200px">
-</form>
+<h2 class="sub-main-title"> Click a blog to view its contents </h2>
 
+<form method="post">
+	<input type="submit" name="submit" value="Create Blog Post" style="width: 200px">
+</form>
+<hr>
 {% for blog in blogs %}
 	{{ blog.render() | safe }}
 	<br><br>
