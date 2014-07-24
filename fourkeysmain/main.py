@@ -23,6 +23,7 @@ import random
 import string
 import urllib2
 import json
+import logging
 
 import rot13
 import signup
@@ -252,7 +253,6 @@ class Welcome(BaseHandler):
 			self.redirect('/signup')
 
 	def post(self):
-
 		logout = self.request.get('Logout')
 
 		if logout:
@@ -315,15 +315,31 @@ class Art(db.Model):
 	def render(self):
 		return render_str("art.html", art = self)
 
-class asciichan(BaseHandler):
-	def render_asciichan(self, title="", art="", error=""):
+def art_key(name = 'default'):
+	return db.Key.from_path('arts', name)
+
+ASCIICACHE = {}
+def top_arts():
+	key = 'top'
+	if key in ASCIICACHE:
+		arts = ASCIICACHE[key]
+	else:		
+		logging.error("DB QUERY")
 		arts = db.GqlQuery("SELECT * "
-						   "FROM Art "
-						   "ORDER BY created DESC "
-						   "LIMIT 10")
+							"FROM Art "
+							"WHERE ANCESTOR IS :1 "
+							"ORDER BY created DESC "
+							"LIMIT 10",
+							art_key())
 
 		# prevent query from running multiple times (also called in html)
 		arts = list(arts)
+		ASCIICACHE[key] = arts
+	return arts	
+
+class asciichan(BaseHandler):
+	def render_asciichan(self, title="", art="", error=""):
+		arts = top_arts()
 
 		points = filter(None, (a.coords for a in arts))
 		img_url = None
@@ -333,7 +349,6 @@ class asciichan(BaseHandler):
 		self.render('ascii.html', title=title, art=art, error=error, arts=arts, img_url = img_url)
 
 	def get(self):
-		self.write(repr(get_coords(self.request.remote_addr)))
 		self.render_asciichan()
 
 	def post(self):
@@ -341,12 +356,13 @@ class asciichan(BaseHandler):
 		art = self.request.get('art')
 
 		if title and art:
-			a = Art(title = title, art = art)
+			a = Art(parent=art_key(),title = title, art = art)
 			coords = get_coords(self.request.remote_addr)
 			if coords:
 				a.coords = coords
 
 			a.put()
+			ASCIICACHE.clear()
 
 			self.redirect("/asciichan")
 		else:
@@ -355,7 +371,7 @@ class asciichan(BaseHandler):
 
 ###BLOG CLASSES
 def blog_key(name = 'default'):
-    return db.Key.from_path('blogs', name)
+	return db.Key.from_path('blogs', name)
 
 class Blog(db.Model):
 	subject = db.StringProperty(required=True)
@@ -369,7 +385,7 @@ class Blog(db.Model):
 
 class BlogHandler(BaseHandler):
 	def get(self):
-		blogs = db.GqlQuery("SELECT * from Blog order by created desc limit 10")
+		blogs = db.GqlQuery("SELECT * from Blog WHERE ANCESTOR IS :1 order by created desc limit 10",blog_key())
 
 		if self.request.url.endswith('.json'):
 			self.format = 'json'
@@ -441,16 +457,16 @@ class Robot(BaseHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/rot13', Rot13),
-    ('/shopping', Shopping),
-    ('/signup', Signup),
-	('/welcome', Welcome),
-	('/fizzbuzz', Fizzbuzz),
-	('/asciichan', asciichan),
+    ('/rot13/?', Rot13),
+    ('/shopping/?', Shopping),
+    ('/signup/?', Signup),
+	('/welcome/?', Welcome),
+	('/fizzbuzz/?', Fizzbuzz),
+	('/asciichan/?', asciichan),
 	('/blog/?(?:\.json)?', BlogHandler),
-	('/blog/newpost', BlogNewPostHandler),
+	('/blog/newpost/?', BlogNewPostHandler),
 	('/blog/(\d+)/?(?:\.json)?', BlogPostHandler),
-	('/login', Login),
-	('/logout', Logout),
-	("/robot", Robot)
+	('/login/?', Login),
+	('/logout/?', Logout),
+	('/robot/?', Robot)
 ], debug=True)
