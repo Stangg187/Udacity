@@ -415,6 +415,7 @@ class BlogPostHandler(BaseHandler):
 
 		if not post:
 			self.error(404)
+			return
 
 		if self.request.url.endswith('.json'):
 			self.format = 'json'
