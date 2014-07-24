@@ -50,6 +50,11 @@ class BaseHandler(webapp2.RequestHandler):
 	def render(self, template, **kw):
 		self.write(self.render_str(template, **kw))
 
+	def render_json(self, d):
+		json_txt = json.dumps(d)
+		self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
+		self.response.out.write(json_txt)
+
 ### Front Page of site
 
 class MainPage(BaseHandler):
@@ -172,7 +177,7 @@ class Signup(BaseHandler):
 			cookie_str = str(user_name + '|' + hashed_password.split(',')[0])
 
 			self.response.headers.add_header('Set-Cookie', 'user_id='+cookie_str+'; Path=/')
-			self.redirect('/signup/welcome')
+			self.redirect('/welcome')
 
 class Login(BaseHandler):
 	def get(self):
@@ -220,7 +225,7 @@ class Login(BaseHandler):
 			cookie_str = str(user_name + '|' + hashed_password.split(',')[0])
 
 			self.response.headers.add_header('Set-Cookie', 'user_id='+cookie_str+'; Path=/')
-			self.redirect('/login/welcome')
+			self.redirect('/welcome')
 
 
 
@@ -251,38 +256,8 @@ class Welcome(BaseHandler):
 		logout = self.request.get('Logout')
 
 		if logout:
-			self.redirect('/logout')
-
-
-class LoginWelcome(BaseHandler):
-	def get(self):
-		cookie = self.request.cookies.get('user_id')
-
-		if cookie:
-			userid = str(cookie.split('|')[0])
-			passhash = str(cookie.split('|')[1])
-
-			users = db.GqlQuery("SELECT * from UserData WHERE  username=:1 limit 1", userid)
-
-			user = users.get()
-
-			passdb = user.password.split(',')[0]
-
-			if signup.valid_username(userid):
-				if passhash == passdb:
-					self.render('welcome.html', username = userid)
-			else:
-				self.redirect('/login')
-		else:
-			self.redirect('/login')
-
-	def post(self):
-
-		logout = self.request.get('Logout')
-
-		if logout:
 			self.response.delete_cookie('user_id')
-			self.redirect('/login')
+			self.redirect('/logout')
 
 class Logout(BaseHandler):
 	def get(self):
@@ -393,13 +368,24 @@ class Blog(db.Model):
 		return render_str("post.html", blog = self)
 
 class BlogHandler(BaseHandler):
-	def render_blog(self):
+	def get(self):
 		blogs = db.GqlQuery("SELECT * from Blog order by created desc limit 10")
 
-		self.render('blogfront.html', blogs=blogs)
+		if self.request.url.endswith('.json'):
+			self.format = 'json'
+		else:   
+			self.format = 'html'
 
-	def get(self):
-		self.render_blog()
+		if self.format == 'html':
+			self.render('blogfront.html', blogs=blogs)
+		else:
+			json = []
+			for p in blogs:
+				time_fmt = '%c'
+				d = {'subject': p.subject,'content': p.content,'created': p.created.strftime(time_fmt),
+					'last_modified': p.last_modified.strftime(time_fmt)}
+				json.append(d)  
+			self.render_json(json)
 
 	def post(self):
 		self.redirect('/blog/newpost')			
@@ -419,7 +405,7 @@ class BlogNewPostHandler(BaseHandler):
 
 			self.redirect('/blog/%d' % post_id)
 		else:
-			error = "We need both a subject and cotnent!"
+			error = "We need both a subject and content!"
 			self.render('blognewpost.html', subject=subject, content=content, error=error)	
 
 class BlogPostHandler(BaseHandler):
@@ -430,42 +416,18 @@ class BlogPostHandler(BaseHandler):
 		if not post:
 			self.error(404)
 
-		self.render('blogpost.html', post=post, post_id=post_id)
+		if self.request.url.endswith('.json'):
+			self.format = 'json'
+		else:   
+			self.format = 'html'
 
-class JsonBlogHandler(BaseHandler):
-	def render_json(self, d):
-		json_txt = json.dumps(d)
-		self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
-		self.response.out.write(json_txt)
-
-	def get(self):
-		blogs = db.GqlQuery("SELECT * from Blog order by created desc limit 10")
-
-		json = []
-		for p in blogs:
+		if self.format == 'html': 
+			self.render('blogpost.html', post=post, post_id=post_id)
+		else:
 			time_fmt = '%c'
-			d = {'subject': p.subject,'content': p.content,'created': p.created.strftime(time_fmt),
-				'last_modified': p.last_modified.strftime(time_fmt)}
-			json.append(d)  
-		self.render_json(json)
-
-class JsonBlogPostHandler(BaseHandler):
-	def render_json(self, d):
-		json_txt = json.dumps(d)
-		self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
-		self.response.out.write(json_txt)
-
-	def get(self, post_id):
-		key = db.Key.from_path('Blog', int(post_id), parent=blog_key())
-		post = db.get(key)
-
-		if not post:
-			self.error(404)
-
-		time_fmt = '%c'
-		d = {'subject': post.subject,'content': post.content,'created': post.created.strftime(time_fmt),
-			'last_modified': post.last_modified.strftime(time_fmt)}
-		self.render_json([d])
+			d = {'subject': post.subject,'content': post.content,'created': post.created.strftime(time_fmt),
+				'last_modified': post.last_modified.strftime(time_fmt)}
+			self.render_json([d])
 
 
 ### Robot
@@ -481,18 +443,13 @@ app = webapp2.WSGIApplication([
     ('/rot13', Rot13),
     ('/shopping', Shopping),
     ('/signup', Signup),
-	('/signup/welcome', Welcome),
+	('/welcome', Welcome),
 	('/fizzbuzz', Fizzbuzz),
 	('/asciichan', asciichan),
-	('/blog', BlogHandler),
+	('/blog/?(?:\.json)?', BlogHandler),
 	('/blog/newpost', BlogNewPostHandler),
-	('/blog/(\d+)', BlogPostHandler),
-	('/blog.json', JsonBlogHandler),
-	('/blog/.json', JsonBlogHandler),
-	('/blog/(\d+).json', JsonBlogPostHandler),
-	('/blog/(\d+)/.json', JsonBlogPostHandler),
+	('/blog/(\d+)/?(?:\.json)?', BlogPostHandler),
 	('/login', Login),
-	('/login/welcome', LoginWelcome),
 	('/logout', Logout),
 	("/robot", Robot)
 ], debug=True)
