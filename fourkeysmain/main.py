@@ -24,12 +24,14 @@ import string
 import urllib2
 import json
 import logging
+import time
 
 import rot13
 import signup
 
 from xml.dom import minidom
 from google.appengine.ext import db
+from google.appengine.api import memcache
 
 #current directory im in /templates
 template_dir = os.path.join(os.path.dirname(__file__), 'templates') 
@@ -318,12 +320,12 @@ class Art(db.Model):
 def art_key(name = 'default'):
 	return db.Key.from_path('arts', name)
 
-ASCIICACHE = {}
-def top_arts():
+def top_arts(update = False):
 	key = 'top'
-	if key in ASCIICACHE:
-		arts = ASCIICACHE[key]
-	else:		
+	
+	arts = memcache.get(key)
+
+	if arts is None or update:
 		logging.error("DB QUERY")
 		arts = db.GqlQuery("SELECT * "
 							"FROM Art "
@@ -334,7 +336,9 @@ def top_arts():
 
 		# prevent query from running multiple times (also called in html)
 		arts = list(arts)
-		ASCIICACHE[key] = arts
+
+		memcache.set(key, arts)
+
 	return arts	
 
 class asciichan(BaseHandler):
@@ -362,7 +366,8 @@ class asciichan(BaseHandler):
 				a.coords = coords
 
 			a.put()
-			ASCIICACHE.clear()
+			# return the query and update the cache
+			top_arts(True)
 
 			self.redirect("/asciichan")
 		else:
@@ -383,9 +388,32 @@ class Blog(db.Model):
 		self._render_text = self.content.replace('\n', '<br>')
 		return render_str("post.html", blog = self)
 
+def top_posts(update = False):
+	key = 'topposts'
+
+	blogs = memcache.get(key)
+
+	if blogs is None or update:
+		logging.error("DB QUERY")
+		blogs = db.GqlQuery("SELECT * "
+							"from Blog "
+							"WHERE ANCESTOR IS :1 "
+							"order by created desc "
+							"limit 10",
+							blog_key())
+
+		blogs = list(blogs)
+		timeran = time.time()
+
+		memcache.set(key, blogs)
+		memcache.set('age', timeran)
+	return blogs
+
 class BlogHandler(BaseHandler):
 	def get(self):
-		blogs = db.GqlQuery("SELECT * from Blog WHERE ANCESTOR IS :1 order by created desc limit 10",blog_key())
+		blogs = top_posts()
+
+		lastqueried = time.time() - memcache.get('age')
 
 		if self.request.url.endswith('.json'):
 			self.format = 'json'
@@ -394,6 +422,7 @@ class BlogHandler(BaseHandler):
 
 		if self.format == 'html':
 			self.render('blogfront.html', blogs=blogs)
+			self.response.out.write('Queried %d seconds ago' % lastqueried)
 		else:
 			json = []
 			for p in blogs:
@@ -417,6 +446,9 @@ class BlogNewPostHandler(BaseHandler):
 		if subject and content:
 			b = Blog(parent = blog_key(), subject = subject, content = content)
 			b.put()
+
+			top_posts(True)
+
 			post_id = b.key().id()
 
 			self.redirect('/blog/%d' % post_id)
@@ -424,10 +456,31 @@ class BlogNewPostHandler(BaseHandler):
 			error = "We need both a subject and content!"
 			self.render('blognewpost.html', subject=subject, content=content, error=error)	
 
-class BlogPostHandler(BaseHandler):
-	def get(self, post_id):
+def perma_post(post_id):
+
+	postkey = str(post_id)
+	post = memcache.get(postkey)
+
+	if post is None:
+		logging.error("DB QUERY")
+
 		key = db.Key.from_path('Blog', int(post_id), parent=blog_key())
 		post = db.get(key)
+
+		agekey = str(post_id) + 'age'
+		age = time.time()
+
+		memcache.set(postkey, post)
+		memcache.set(agekey, age)
+	return post
+
+class BlogPostHandler(BaseHandler):
+	def get(self, post_id):
+
+		post = perma_post(post_id)
+		agekey = str(post_id) + 'age'
+
+		lastqueried = time.time() - memcache.get(agekey)
 
 		if not post:
 			self.error(404)
@@ -440,12 +493,17 @@ class BlogPostHandler(BaseHandler):
 
 		if self.format == 'html': 
 			self.render('blogpost.html', post=post, post_id=post_id)
+			self.response.out.write('Queried %d seconds ago' % lastqueried)
 		else:
 			time_fmt = '%c'
 			d = {'subject': post.subject,'content': post.content,'created': post.created.strftime(time_fmt),
 				'last_modified': post.last_modified.strftime(time_fmt)}
 			self.render_json([d])
 
+class Flush(BaseHandler):
+	def get(self):
+		memcache.flush_all()
+		self.redirect('/blog')
 
 ### Robot
 class Robot(BaseHandler):
@@ -459,14 +517,15 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/rot13/?', Rot13),
     ('/shopping/?', Shopping),
-    ('/signup/?', Signup),
-	('/welcome/?', Welcome),
+    ('/?(?:blog)?/signup/?', Signup),
+	('/?(?:blog)?/welcome/?', Welcome),
 	('/fizzbuzz/?', Fizzbuzz),
 	('/asciichan/?', asciichan),
 	('/blog/?(?:\.json)?', BlogHandler),
 	('/blog/newpost/?', BlogNewPostHandler),
 	('/blog/(\d+)/?(?:\.json)?', BlogPostHandler),
-	('/login/?', Login),
-	('/logout/?', Logout),
-	('/robot/?', Robot)
+	('/?(?:blog)?/login/?', Login),
+	('/?(?:blog)?/logout/?', Logout),
+	('/robot/?', Robot),
+	('/?(?:blog)?/flush', Flush)
 ], debug=True)
