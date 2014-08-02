@@ -6,6 +6,13 @@
 </head>
 {% endblock %}
 
+{% block sidebardesc %}
+<p>
+Checks username validity and password against database (using hash functions).<br>
+Creates cookie on successful login and redirects to welcome page.
+</p>
+{% endblock %}
+
 {% block content %}
   <form method="post">
     <h2>

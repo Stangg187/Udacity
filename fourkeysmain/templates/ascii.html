@@ -6,6 +6,19 @@
 </head>
 {% endblock %}
 
+{% block sidebar %}
+	{% if img_url %}
+		<img class="map" src="{{img_url}}">
+	{% endif %}
+{% endblock %}
+
+{% block sidebardesc %}
+<p>
+Shows ascii art in a blog style, map generates based on submission IPs.<br>
+Bug: First line in art section is offset to the right.
+</p>
+{% endblock %}
+
 {% block content %}
 <a href="/asciichan" class="main-title"> 
 ASCII CHAN 
@@ -16,10 +29,6 @@ ASCII CHAN
 		<div>Title</div>
 		<input type="text" name="title" value="{{title}}">
 	</label>
-
-	{% if img_url %}
-		<img class="map" src="{{img_url}}">
-	{% endif %}
 
 	<label>
 		<div>Art</div>

@@ -30,9 +30,25 @@
         </ul>
       </div>
     </header>
-    <br>
-    {% block content %}
- 		{% endblock %}
+    <div id="sidebar">
+      <h2>Sidebar</h2>
+      <p>Description</p>
+      {% block sidebardesc %}
+      {% endblock %}
+      <ul>
+        <li>Content 1</li>
+        <li>Content 2</li>
+      </ul>
+      {% block sidebar %}
+      {% endblock %}
+    </div>
+    <div id="main">
+      {% block content %}
+      {% endblock %}
+    </div>
+    <div id="footer">
+      <p>Footer</p>
+    </div>
   </body>
 
 </html>

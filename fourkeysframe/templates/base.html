@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link href='https://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Marvel:700' rel='stylesheet' type='text/css'>
+    <link type="text/css" rel="stylesheet" href="/assets/normalize.css" />
+    <link type="text/css" rel="stylesheet" href="/assets/main.css" />
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/codejs.js"></script>
+    
+    {% block head %}
+    {% endblock %}
+    
+  </head>
+
+  <body>
+    <div id="header">
+      <h1>Document Heading</h1>
+      <div id="nav">
+        <ul>
+          <li><a href="/rot13">Rot13 Cipher</a></li>
+          <li><a href="/shopping">Shopping List</a></li>
+          <li><a href="/fizzbuzz">Fizz Buzz</a></li>
+          <li><a href="/asciichan">ASCII Chan</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/signup">Signup Form</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/robot">Robot</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="sidebar">
+      <h2>Column 1</h2>
+      <p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit...</p>
+      <ul>
+        <li><a href="#">Link 1</a></li>
+        <li><a href="#">Link 2</a></li>
+      </ul>
+    </div>
+    <div id="main">
+      <h2>Column 2</h2>
+      <p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit... </p>
+      {% block content %}
+      {% endblock %}
+    </div>
+    <div id="footer">
+      <p>Footer</p>
+    </div>
+  </body>
+
+</html>
