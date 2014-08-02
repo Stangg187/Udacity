@@ -1,3 +1,15 @@
+// checks column heights for main and sidebar, and adjusts so that they are equal to the tallest
+function adjustHeight() {
+    if ((document.getElementById('main').offsetHeight) > (document.getElementById('sidebar').offsetHeight) )
+    {
+        document.getElementById('sidebar').style.height = (document.getElementById('main').offsetHeight) + "px";
+    }
+    else
+    {
+        document.getElementById('main').style.height = (document.getElementById('sidebar').offsetHeight) + "px"
+    }
+}
+
 //like button function for blog posts
 function like() {
     alert("Glad you liked it!");
@@ -30,3 +42,4 @@ $(function () {
 	  $("body").css("background", randomRGBA);
 	});
 });
+
