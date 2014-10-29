@@ -27,6 +27,9 @@ body {
 	-webkit-transition:all .2s ease-in;
 	-moz-transition:all .2s ease-in;
 	transition:all .2s ease-in
+	-webkit-filter: invert(1);
+	-moz-filter: invert(1);
+	filter: invert(1);
 }
 
 hr {
