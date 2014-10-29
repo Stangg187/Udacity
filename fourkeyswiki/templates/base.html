@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link href='https://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Marvel:700' rel='stylesheet' type='text/css'>
+    <link type="text/css" rel="stylesheet" href="/assets/normalize.css" />
+    <link type="text/css" rel="stylesheet" href="/assets/main.css" />
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/codejs.js"></script>
+    
+    {% block head %}
+    {% endblock %}
+    
+  </head>
+
+  <body onload="adjustHeight()">
+		<header>
+      <h1><a href="/" class="main-title">Fourkeys Wiki Project</a></h1>
+      <div class="nav">
+        <ul class="main-list">
+          <li class="main-list-item"><a href="/" class="title-link">Wiki</a></li>
+          <li class="main-list-item"><a href="/signup" class="title-link">Signup Form</a></li>
+          <li class="main-list-item"><a href="/login" class="title-link">Login</a></li>
+        </ul>
+      </div>
+    </header>
+    <div id="sidebar">
+      <h2>Sidebar</h2>
+      <p>Description</p>
+      {% block sidebardesc %}
+      {% endblock %}
+      <ul>
+        <li>Content 1</li>
+        <li>Content 2</li>
+      </ul>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      {% block sidebar %}
+      {% endblock %}
+    </div>
+    <div id="main">
+      {% block content %}
+      {% endblock %}
+    </div>
+    <div id="footer">
+      <p>Footer</p>
+    </div>
+  </body>
+
+</html>

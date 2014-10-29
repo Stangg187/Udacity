@@ -17,10 +17,7 @@
 import os
 import webapp2
 import jinja2
-import re
 import hmac
-import random
-import string
 import urllib2
 import json
 import logging
@@ -121,9 +118,8 @@ class Rot13(BaseHandler):
         self.render('rot13-form.html')
 
     def post(self):
-        finaltext = ''
         tex = self.request.get('text')
-        finaltext = rot13.rotcipher(tex)
+        finaltext = str(rot13.rotcipher(tex))
 
         self.render('rot13-form.html', text=finaltext)
 
@@ -221,7 +217,6 @@ class Login(BaseHandler):
         user = users.get()
 
         if user:
-            hashed_password = signup.make_pw_hash(user_pass, user.password.split(',')[1])
             checkpw = signup.valid_pw(user_pass, user.password)
 
         if (user_name):
@@ -303,7 +298,6 @@ IP_URL = "http://api.hostip.info/?ip="
 
 
 def get_coords(ip):
-    ip = "4.2.2.2"
     ip = "23.24.209.141"
     url = IP_URL + ip
     content = None
@@ -317,7 +311,7 @@ def get_coords(ip):
         coords = d.getElementsByTagName("gml:coordinates")
         if coords and coords[0].childNodes[0].nodeValue:
             lon, lat = coords[0].childNodes[0].nodeValue.split(',')
-            return db.GeoPt(lat, lon)  #google datatype for latitude and longitutde
+            return db.GeoPt(lat, lon)  # google data type for latitude and longitude
 
 
 class Art(db.Model):

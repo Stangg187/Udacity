@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block head %}
+<head>
+  <title>Fourkeys Wiki</title>
+</head>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+	<div class="content-heading">
+		<div class="content-subject">
+			{{subject}}
+		</div>
+
+		<div class="content-date">
+            {{author}}
+		</div>
+	</div>
+
+	<div class="content-body">
+		{{content | safe}}
+		<br>
+	</div>
+    <br>
+<form method="post">
+    <input type="submit" name="Edit" value="Edit">
+</form>
+</div>
+{% endblock %}
+

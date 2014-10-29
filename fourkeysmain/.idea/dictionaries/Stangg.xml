@@ -2,10 +2,15 @@
   <dictionary name="Stangg">
     <words>
       <w>checkpw</w>
+      <w>editpage</w>
       <w>finaltext</w>
       <w>fizzbuzz</w>
+      <w>jinja</w>
       <w>passerror</w>
+      <w>postkey</w>
       <w>usererror</w>
+      <w>wikicheck</w>
+      <w>wikipost</w>
     </words>
   </dictionary>
 </component>

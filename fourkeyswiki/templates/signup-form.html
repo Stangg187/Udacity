@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block head %}
+ <head>
+    <title>Signup Form</title>
+</head>
+{% endblock %}
+
+{% block sidebardesc %}
+<p>
+Signup form validates a request to create a user, creates a cookie for login.<br>
+Redirects to welcome page if successful.<br>
+Password is stored securely in datastore.<br>
+Username must be between 3 and 20 characters, letters and numbers only.<br>
+Password must be between 3 and 20 characters.<br>
+Email is optional but must conform to something@something.something
+</p>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <h2>
+    Please enter your details:
+    </h2>
+    <table class="center">
+      <tr>
+        <td class="label"> 
+          Username
+        </td>
+        <td>
+          <input type="text" name="username" value="{{username}}">
+        </td>
+        <td class="error">
+          {{usererror}}
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label"> 
+          Password
+        </td>
+        <td>
+          <input type="password" name="password" value="">
+        </td>
+        <td class="error">
+          {{passerror}}
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label"> 
+          Verify Password
+        </td>
+        <td>
+          <input type="password" name="verify" value="">
+        </td>
+        <td class="error">
+          {{verifyerror}}
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">
+          Email (Optional)
+        </td>
+        <td>
+          <input type="text" name="email" value="{{email}}">
+        </td>
+        <td class="error">
+          {{emailerror}}
+        </td>
+      </tr>
+    </table>
+    <br>
+    <input type="submit">
+  </form>
+ 
+{% endblock %}

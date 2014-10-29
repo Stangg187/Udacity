@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block head %}
+ <head>
+    <title>Login Form</title>
+</head>
+{% endblock %}
+
+{% block sidebardesc %}
+<p>
+Checks username validity and password against database (using hash functions).<br>
+Creates cookie on successful login and redirects to welcome page.
+</p>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <h2>
+    Please enter your details:
+    </h2>
+    <table class="center">
+      <tr>
+        <td class="label"> 
+          Username
+        </td>
+        <td>
+          <input type="text" name="username" value="{{username}}">
+        </td>
+        <td class="error">
+          {{usererror}}
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label"> 
+          Password
+        </td>
+        <td>
+          <input type="password" name="password" value="">
+        </td>
+        <td class="error">
+          {{passerror}}
+        </td>
+      </tr>
+    </table>
+    <br>
+    <input type="submit">
+  </form>
+ 
+{% endblock %}

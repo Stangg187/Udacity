@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/fourkeysmain.iml" filepath="$PROJECT_DIR$/.idea/fourkeysmain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../fourkeyswiki/.idea/fourkeyswiki.iml" filepath="$PROJECT_DIR$/../fourkeyswiki/.idea/fourkeyswiki.iml" />
     </modules>
   </component>
 </project>
