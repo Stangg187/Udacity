@@ -1,0 +1,33 @@
+* {
+	font-family: 'Lucida Grande', sans-serif;
+	color: #666666;
+	line-height: 2;
+}
+
+.product-page {
+	max-width: 970px;
+}
+
+.feature-box {
+	border: solid 1px #CCCCCC;
+	margin-top: 30px;
+	padding-left: 20px;
+	padding-top:20px;
+	padding-bottom: 20px;
+	max-width: 374px;
+}
+
+.subtitle {
+	color: #F07C17;
+	font-weight: bold;
+	font-size: 1.8em;
+	padding-bottom: 20px;
+} 
+
+.mug-image {
+	max-width: 374px;
+	max-height: 400px;
+	margin-top: 20px;
+}
+
+

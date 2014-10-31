@@ -4,103 +4,45 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Portfolio</title>
-	<link href='http://fonts.googleapis.com/css?family=Lato:100,300' rel='stylesheet'>
+	<title>Product Page</title>
 	<script src="js/jquery-2.1.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/custom.js"></script>
 	<link rel="stylesheet" href="css/bootstrap.css"> 
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-	<div class="container">
+	<div class="container product-page">
 		<div class="row" id="headerRow">
-			<div class="col-md-2">
-			<img class="title-logo img-responsive" src="images/logo.png" alt="Udacity Logo">
-		</div>
-			<div class="col-md-10 text-right text-uppercase">
-				<h1 class="title-super text-thin">Anthony Fawkes</h1>
-				<h4>Front-End Ninja</h4>
+			<div class="col-md-12 text-center">
+				<h1 class="title-super">Orange Udacity Mug</h1>
 			</div>
 		</div>
-		<hr>
-		<div class="row" id="mainImage">
-			<div class="col-md-12">
-				<img src="images/main.jpg" class="img-responsive" alt="Responsive image">
+		<div class="row" id="mainbody">
+			<div class="col-md-5">
+				<img src="images/mug.png" class="img-responsive mug-image" alt="Responsive image">
+				<div class="feature-box">
+					<h2 class="subtitle">Main Features</h2>
+					<ul>
+						<li>Holds your favourite drink</li>
+						<li>Energizing color</li>
+						<li>Reminds you to learn</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-7">
+				<h2 class="subtitle">A Good Way to Start a Day</h2>
+				<p class="main-text">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris scelerisque risus non neque accumsan, sit amet iaculis dolor dapibus. Sed sit amet tincidunt lorem. Etiam euismod posuere diam eget laoreet. Sed nec dui vulputate, eleifend felis ut, venenatis dui. Aliquam suscipit felis enim, id efficitur purus sollicitudin et. Maecenas eu purus porttitor, varius eros a, pharetra nisl. Phasellus vehicula sapien eu ipsum dictum gravida. Sed placerat turpis eu massa mattis, sit amet luctus velit ultricies. Etiam suscipit sodales nibh. Suspendisse iaculis, nunc et bibendum euismod, arcu lacus molestie justo, vitae hendrerit diam ante placerat magna.
+				</p>
+
+				<p class="main-text">	Nam gravida dolor in justo commodo aliquam. Sed porta purus sit amet augue suscipit efficitur. Nam ultrices placerat metus, nec gravida nisi porta sed. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rhoncus et ipsum vitae molestie. Nulla aliquam quis metus eget aliquam. Cras a dignissim erat. Aenean aliquet tortor porta elementum consectetur.
+				</p>
+
+				<p class="main-text">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. In accumsan bibendum sapien a sagittis. Proin eget odio ultrices, placerat purus at, sodales sapien. Mauris non ornare ante, eu mattis risus. Curabitur a consequat orci, vitae porta nulla. Integer quis elit accumsan, tincidunt enim eu, pharetra nisl. Maecenas non nisi neque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut a tellus magna. Nullam facilisis convallis purus, ac commodo magna molestie sit amet. Vestibulum sit amet nunc et sapien tristique cursus.  Nullam interdum nulla libero, non tincidunt nisi viverra in. Integer egestas imperdiet nulla, ac volutpat orci consectetur eget. Donec varius est ut ligula ultricies, sed scelerisque velit lobortis.
+				</p>
 			</div>
 		</div>
 
-		<div class="row" id="workLinks">
-			<div class="col-md-12">
-				<h2 class="text-muted">Featured Work</h2>
-			</div>
-			<div class="col-md-4 text-center">
-				<img src="images/project1.jpg" class="img-responsive hover-image" data-toggle="modal" data-target="#project1" alt="Responsive image">
-				<h3>APPIFY</h3>
-				<a href="https://github.com/udacity/Appify/">https://github.com/udacity/Appify/</a>
-			</div>	
-			<div class="col-md-4 text-center">
-				<img src="images/project2.jpg" class="img-responsive hover-image" data-toggle="modal" data-target="#project2" alt="Responsive image">
-				<h3>SUNFLOWER</h3>
-				<a href="https://github.com/udacity/Sunflower/">https://github.com/udacity/Sunflower/</a>
-			</div>
-			<div class="col-md-4 text-center">
-				<img src="images/project3.jpg" class="img-responsive hover-image" data-toggle="modal" data-target="#project3" alt="Responsive image">
-				<h3>BOKEH</h3>
-				<a href="https://github.com/udacity/Bokey/">https://github.com/udacity/Bokey/</a>
-			</div>
-
-		</div>
-	</div>
-
-	<!-- Modal -->
-	<div class="modal fade" id="project1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h4 class="modal-title" id="myModalLabel">Favorite App Page</h4>
-	      </div>
-	      <div class="modal-body">
-	        <img class="img-responsive" src="images/project1.jpg" alt="Modal Responsive Image">
-	        This was my first project in this class. I learned a lot about HTML and CSS.
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	<div class="modal fade" id="project2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h4 class="modal-title" id="myModalLabel2">Favorite App Page</h4>
-	      </div>
-	      <div class="modal-body">
-	        <img class="img-responsive" src="images/project2.jpg" alt="Modal Responsive Image">
-	        This was my second project in this class. I learned a lot about javascript.
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	<div class="modal fade" id="project3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h4 class="modal-title" id="myModalLabel3">Favorite App Page</h4>
-	      </div>
-	      <div class="modal-body">
-	        <img class="img-responsive" src="images/project3.jpg" alt="Modal Responsive Image">
-	        This was my third project in this class. I learned a lot about spelling javascript correctly.
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      </div>
-	    </div>
-	  </div>
-</div>
 </body>
 </html>
