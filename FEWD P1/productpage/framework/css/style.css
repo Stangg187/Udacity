@@ -1,0 +1,41 @@
+body {
+	font-family: "Lato", sans-serif;
+	color: #747704;
+	font-weight: 300;
+}
+
+.text-muted {
+	color: #bcbbbb;
+}
+.text-thin {
+	font-weight: 100;
+}
+
+.title-super {
+	font-size: 60px;
+}
+
+.title-logo {
+	margin-top: 20px;
+}
+
+.hover-image:hover {
+	border: solid 2px #CCC;
+	-moz-box-shadow: 1px 1px 5px #999;
+	-webkit-box-shadow: 1px 1px 5px #999;
+	box-shadow: 1px 1px 5px #999;
+	-webkit-transition:all .2s ease-in;
+	-moz-transition:all .2s ease-in;
+	transition:all .2s ease-in
+	-webkit-filter: invert(1);
+	-moz-filter: invert(1);
+	filter: invert(1);
+}
+
+hr {
+	border: none;
+	height: 4px;
+	color: #BCBBBB;
+	background-color: #BCBBBB;
+}
+
