@@ -15,6 +15,7 @@
 	padding-top:20px;
 	padding-bottom: 20px;
 	max-width: 374px;
+	font-size: 1.17em;
 }
 
 .subtitle {
@@ -25,9 +26,13 @@
 } 
 
 .mug-image {
-	max-width: 374px;
-	max-height: 400px;
 	margin-top: 20px;
 }
 
+.main-text {
+	font-size: 1.17em;
+}
 
+@media only screen and (min-device-width : 768px) {
+
+}
