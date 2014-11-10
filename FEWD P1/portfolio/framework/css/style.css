@@ -39,7 +39,7 @@ hr {
 	background-color: #BCBBBB;
 }
 
-@media (min-width: 400px) {
+@media (max-width: 991px) {
 	.hover-image {
 		margin: auto;
 	}
