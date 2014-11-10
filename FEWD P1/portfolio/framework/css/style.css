@@ -39,3 +39,11 @@ hr {
 	background-color: #BCBBBB;
 }
 
+@media (min-width: 400px) {
+	.hover-image {
+		margin: auto;
+	}
+	.text-muted {
+		text-align: center;
+	}
+}
