@@ -225,4 +225,8 @@ span {
     display: block;
   }
 }
+
+.top-bar {
+  margin-top: 0px;
+}
  
