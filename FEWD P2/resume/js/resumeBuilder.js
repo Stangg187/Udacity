@@ -22,7 +22,6 @@ var bio = {
 		"Programming",
 		"Infrastructure", 
 		"ASP.Net",
-		"Windows",
 		"Vmware",
 		"SQL (Microsoft and Oracle)"
 	 ],
