@@ -26,9 +26,6 @@ var bio = {
 		"SQL (Microsoft and Oracle)"
 	 ],
 	 "display": function() {
-		 	PrependToResume(bio.role, HTMLheaderRole, "#header");
-			PrependToResume(bio.fullName, HTMLheaderName, "#header");
-
 			AppendToResume(bio.biopic, HTMLbioPic, "#header");
 			AppendToResume(bio.welcome, HTMLWelcomeMsg, "#header");
 

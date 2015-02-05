@@ -1,0 +1,69 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<canvas id="my_canvas"></canvas>
+</body>
+<script>
+var canvas = null;
+var context = null;
+var image = null;
+
+var assets = ['https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk00.png',
+							'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk01.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk02.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk03.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk04.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk05.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk06.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk07.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk08.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk09.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk10.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk11.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk12.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk13.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk14.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk15.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk16.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk17.png',
+              'https://www.udacity.com/media/js/standalone/libs/gamedev_assets/robowalk/robowalk18.png'
+             ];
+var frames = [];
+var frame = 0;
+var framerate = 1000/30;
+
+var setup = function() {
+	canvas = document.getElementById('my_canvas');
+	context = canvas.getContext('2d');
+
+	canvas.width = 1200;
+	canvas.height = 720;
+
+	image = new Image();
+	image.src = 'images/stare.jpg'
+	image.onload = onImageLoad;
+
+	for(a in assets){
+		frames.push(new Image());
+		frames[a].onload = onImageLoad;
+		frames[a].src = assets[a];
+	}
+	setInterval(animate, framerate);
+};
+
+var animate = function(){
+	context.clearRect(0,0,canvas.width, canvas.height);
+	frame = (frame + 1) % frames.length;
+	context.drawImage(frames[frame], 192,192);
+}
+
+var onImageLoad = function(){
+	console.log("the image has been loaded");
+}
+
+document.onload = setup();
+
+</script>
+</html>
