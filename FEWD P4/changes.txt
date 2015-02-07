@@ -1,0 +1,9 @@
+I moved the scripts to the bottom of the body to stop render blocking.
+
+I moved the style.css inline and changed the google fonts call to an @font-face query which drastically improved load times.
+
+I created a second pizzeria image and scaled it down to 100px wide using GIMP (after optimsing the image with a windows tool), then I put this in the img directory and removed the style tag to set it to 100px, because its always 100px.
+
+These changes gave me a page speed score of 95 when hosted on github.io.
+
+Stangg187.github.io.
